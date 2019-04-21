@@ -14,15 +14,11 @@ void setup() {
 
 
 void loop() { 
-  sensors.requestTemperatures(); B
-  delay(500);  //delay je dobry, niektore DS senzory musia počkať, kým vrátia hodnotu! 
+  sensors.requestTemperatures();
+  delay(1000);  //delay minimalne 500-750ms
   Serial.println("Teplota prve cidlo:"); 
   Serial.println(sensors.getTempCByIndex(0));
   Serial.println("Teplota druhe cidlo:"); 
-  Serial.println(sensors.getTempCByIndex(1));
-  Serial.println("Teplota tretie cidlo:");  
-  Serial.println(sensors.getTempCByIndex(2));
-  Serial.println("Teplota stvrte cidlo:"); 
-  Serial.println(sensors.getTempCByIndex(3));    
+  Serial.println(sensors.getTempCByIndex(1)); 
   delay(2000); 
 }
