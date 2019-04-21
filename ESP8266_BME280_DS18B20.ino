@@ -3,34 +3,31 @@
 #include <OneWire.h>
 #include <Wire.h>
 #include <SPI.h>
-#include "Adafruit_BMP280.h"
 #include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 #define ONE_WIRE_BUS 0 //D3 DS18b20 pripojit na tuto zbernicu
+#define BME280_ADRESA (0x76)
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
-#include <DHT.h>
-#include <DHT_U.h>
-#define DHTPIN 14         // D5 na pripojenie DHT22
-#define DHTTYPE DHT22
-DHT_Unified dht(DHTPIN, DHTTYPE);
+Adafruit_BME280 bme;
 const char* ssid = "meno_wifi";
 const char* password = "heslo_wifi";
 const char* host = "www.arduino.php5.sk";
 const int httpPort = 80;
 WiFiClient client;
-Adafruit_BMP280 bmp;
 void setup() {
   sensors.begin(); //aktivujem senzory na OneWire zbernici
-  bmp.begin();
-  dht.begin();
-  sensor_t sensor;
+  if (!bme.begin(BME280_ADRESA)) {
+    Serial.println("BME280 senzor nenalezen, zkontrolujte zapojeni!");
+    while (1);
+  }
   Serial.begin(115200); //rychlost seriovej linky
   Serial.println();
   Serial.println("pripajam na ");
   Serial.println(ssid);
   WiFi.begin(ssid, password); //pripoj sa na wifi siet s heslom
   while (WiFi.status() != WL_CONNECTED) { //pokial sa nepripojime na wifi opakuj pripajanie a spustaj funkcie pre ovladanie v offline rezime
-    delay(1000);
+    delay(500);
     Serial.print(".");
   }
   Serial.println("");
@@ -41,26 +38,15 @@ void setup() {
 
 void odosli_teploty() {
   sensors.requestTemperatures();
-  sensor_t sensor;
-  sensors_event_t event;
-  dht.temperature().getEvent(&event);
   delay(500);
   client.stop();
   if (client.connect(host, httpPort)) {
-    float teplota1 = sensors.getTempCByIndex(0);
-    float teplota2 = event.temperature;
-    float teplota3 = bmp.readTemperature();
-    dht.humidity().getEvent(&event);
-    float vlhkost = event.relative_humidity;
-    float tlak = bmp.readPressure() / 100;
-    float nadmorska_vyska = bmp.readAltitude(1013.25);
-    float tlak_hladina_mora = tlak / pow(1 - ((0.0065 * nadmorska_vyska) / (teplota3 + (0.0065 * nadmorska_vyska) + 273.15)), 5.257);
-    String t1 =  String(teplota1);
-    String t2 =  String(teplota2);
-    String t3 =  String(teplota3);
-    String h =  String(vlhkost);
-    String p =  String(tlak_hladina_mora);
-    String url = "/meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=" + t1 + "&teplota2=" + t2 + "&teplota3=" + t3 + "&tlak=" + p + "&vlhkost=" + h;
+    String teplota1 = String(sensors.getTempCByIndex(0));
+    String teplota2 = String(sensors.getTempCByIndex(1));
+    String teplota3 = String(bme.readTemperature());
+    String vlhkost = String(bme.readHumidity());
+    String tlak = String(bme.readPressure() / 100.0F);
+    String url = "/meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak + "&vlhkost=" + vlhkost;
     client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
     Serial.println("Hodnoty do databazy uspesne odoslane");
   } else if (!client.connect(host, httpPort)) {
