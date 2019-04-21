@@ -1,4 +1,7 @@
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
+#include "esp_system.h"
+const int wdtTimeout = 30000;  //time in ms to trigger the watchdog
+hw_timer_t *timer = NULL;
 #include <DallasTemperature.h>
 #include <OneWire.h>
 #include <Wire.h>
@@ -19,6 +22,10 @@ const char* host = "www.arduino.php5.sk";
 const int httpPort = 80;
 WiFiClient client;
 Adafruit_BMP280 bmp;
+void IRAM_ATTR resetModule() {
+  ets_printf("reboot\n");
+  esp_restart();
+}
 void setup() {
   sensors.begin(); //aktivujem senzory na OneWire zbernici
   bmp.begin();
@@ -28,6 +35,10 @@ void setup() {
   Serial.println();
   Serial.println("pripajam na ");
   Serial.println(ssid);
+  timer = timerBegin(0, 80, true);                  //timer 0, div 80
+  timerAttachInterrupt(timer, &resetModule, true);  //attach callback
+  timerAlarmWrite(timer, wdtTimeout * 1000, false); //set time in us
+  timerAlarmEnable(timer);                          //enable interrupt
   WiFi.begin(ssid, password); //pripoj sa na wifi siet s heslom
   while (WiFi.status() != WL_CONNECTED) { //pokial sa nepripojime na wifi opakuj pripajanie a spustaj funkcie pre ovladanie v offline rezime
     delay(1000);
@@ -36,6 +47,7 @@ void setup() {
   Serial.println("");
   Serial.println("Wifi pripojene s IP:");
   Serial.println(WiFi.localIP());
+  timerWrite(timer, 0);
 }
 
 
@@ -106,5 +118,8 @@ void loop() {
   }
   odosli_teploty();
   skontroluj_reset();
-  delay(300000);
+  for (int i = 0; i <= 300; i++) {
+    timerWrite(timer, 0);
+    delay(1000);
+  }
 }
