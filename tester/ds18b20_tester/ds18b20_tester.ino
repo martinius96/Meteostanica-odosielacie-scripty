@@ -12,7 +12,6 @@ void setup() {
   Serial.begin(115200);
 }
 
-
 void loop() { 
   sensors.requestTemperatures();
   delay(1000);  //delay minimalne 500-750ms
