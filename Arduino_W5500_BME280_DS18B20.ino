@@ -39,7 +39,7 @@ void odosli_data() {
   String vlhkost = String(bme.readHumidity());
   String tlak = String(bme.readPressure() / 100.0F);
   if (client.connect(server, 80)) {
-    client.print("GET /meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=");
+    client.print("GET /meteostanicav2/system/nodemcu/add.php?teplota1=");
     client.print(teplota1);
     client.print("&teplota2=");
     client.print(teplota2);
