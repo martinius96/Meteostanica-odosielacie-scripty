@@ -46,7 +46,7 @@ void odosli_teploty() {
     String teplota3 = String(bme.readTemperature());
     String vlhkost = String(bme.readHumidity());
     String tlak = String(bme.readPressure() / 100.0F);
-    String url = "/meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak + "&vlhkost=" + vlhkost;
+    String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak + "&vlhkost=" + vlhkost;
     client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
     Serial.println("Hodnoty do databazy uspesne odoslane");
   } else if (!client.connect(host, httpPort)) {
