@@ -72,7 +72,7 @@ void odosli_teploty() {
     String t3 =  String(teplota3);
     String h =  String(vlhkost);
     String p =  String(tlak_hladina_mora);
-    String url = "/meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=" + t1 + "&teplota2=" + t2 + "&teplota3=" + t3 + "&tlak=" + p + "&vlhkost=" + h;
+    String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + t1 + "&teplota2=" + t2 + "&teplota3=" + t3 + "&tlak=" + p + "&vlhkost=" + h;
     client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
     Serial.println("Hodnoty do databazy uspesne odoslane");
   } else if (!client.connect(host, httpPort)) {
