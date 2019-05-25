@@ -53,7 +53,7 @@ void odosli_data() {
   String h =  String(vlhkost);
   String p =  String(tlak_hladina_mora);
   if (client.connect(server, 80)) {
-    client.print("GET /meteostanicav2/system/nodemcu/zapishodnoty.php?teplota1=");
+    client.print("GET /meteostanicav2/system/nodemcu/add.php?teplota1=");
     client.print(t1);
     client.print("&teplota2=");
     client.print(t2);
