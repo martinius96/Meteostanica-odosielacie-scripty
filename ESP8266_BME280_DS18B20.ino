@@ -43,10 +43,13 @@ void odosli_teploty() {
   if (client.connect(host, httpPort)) {
     String teplota1 = String(sensors.getTempCByIndex(0));
     String teplota2 = String(sensors.getTempCByIndex(1));
-    String teplota3 = String(bme.readTemperature());
+    float t3 = bme.readTemperature();
     String vlhkost = String(bme.readHumidity());
-    String tlak = String(bme.readPressure() / 100.0F);
-    String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak + "&vlhkost=" + vlhkost;
+    float tlak = bme.readPressure() / 100.0F;
+    float nadmorska_vyska = bmp.readAltitude(1013.25);
+    String teplota3 = String(t3);
+    float tlak_hladina_mora = tlak / pow(1 - ((0.0065 * nadmorska_vyska) / (t3 + (0.0065 * nadmorska_vyska) + 273.15)), 5.257);
+    String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak_hladina_mora + "&vlhkost=" + vlhkost;
     client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
     Serial.println("Hodnoty do databazy uspesne odoslane");
   } else if (!client.connect(host, httpPort)) {
