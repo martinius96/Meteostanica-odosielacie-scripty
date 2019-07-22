@@ -46,7 +46,7 @@ void odosli_teploty() {
     float t3 = bme.readTemperature();
     String vlhkost = String(bme.readHumidity());
     float tlak = bme.readPressure() / 100.0F;
-    float nadmorska_vyska = bmp.readAltitude(1013.25);
+    float nadmorska_vyska = bme.readAltitude(1013.25);
     String teplota3 = String(t3);
     float tlak_hladina_mora = tlak / pow(1 - ((0.0065 * nadmorska_vyska) / (t3 + (0.0065 * nadmorska_vyska) + 273.15)), 5.257);
     String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak_hladina_mora + "&vlhkost=" + vlhkost;
