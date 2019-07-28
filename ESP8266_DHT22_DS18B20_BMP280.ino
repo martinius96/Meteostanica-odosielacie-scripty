@@ -1,3 +1,4 @@
+//DEEPSLEEP ZAVEDENY, PREPOJTE GPIO16 (D0) s RST PINOM
 #include <ESP8266WiFi.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
