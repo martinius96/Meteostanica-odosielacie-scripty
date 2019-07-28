@@ -36,6 +36,9 @@ void setup() {
   Serial.println("");
   Serial.println("Wifi pripojene s IP:");
   Serial.println(WiFi.localIP());
+  odosli_teploty();
+  skontroluj_reset();
+  ESP.deepSleep(30e7);
 }
 
 
@@ -97,14 +100,5 @@ void skontroluj_reset() {
   }
 }
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) {
-    WiFi.begin(ssid, password);
-  }
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  odosli_teploty();
-  skontroluj_reset();
-  delay(300000);
+
 }
