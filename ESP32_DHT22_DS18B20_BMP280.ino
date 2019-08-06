@@ -13,7 +13,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 #include <DHT.h>
 #include <DHT_U.h>
-#define DHTPIN 14         // D5 na pripojenie DHT22
+#define DHTPIN 19
 #define DHTTYPE DHT22
 DHT_Unified dht(DHTPIN, DHTTYPE);
 const char* ssid = "meno_wifi";
