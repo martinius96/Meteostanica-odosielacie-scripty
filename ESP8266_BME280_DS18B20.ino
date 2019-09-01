@@ -54,8 +54,10 @@ void odosli_teploty() {
     float nadmorska_vyska = bme.readAltitude(1013.25);
     String teplota3 = String(t3);
     float tlak_hladina_mora = tlak / pow(1 - ((0.0065 * nadmorska_vyska) / (t3 + (0.0065 * nadmorska_vyska) + 273.15)), 5.257);
+   // float tlak_hladina_mora = tlak / pow(1.0 - nadmorska_vyska / 44330.0, 5.255);
+   // float tlak_hladina_mora = tlak / pow(1.0 - 0.0065 * nadmorska_vyska / (t3 + 273.15), 5.255);    
     String url = "/meteostanicav2/system/nodemcu/add.php?teplota1=" + teplota1 + "&teplota2=" + teplota2 + "&teplota3=" + teplota3 + "&tlak=" + tlak_hladina_mora + "&vlhkost=" + vlhkost;
-    client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
+   client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
     Serial.println("Hodnoty do databazy uspesne odoslane");
   } else if (!client.connect(host, httpPort)) {
     Serial.println("Nepodarilo sa odoslat hodnoty - chyba siete");
