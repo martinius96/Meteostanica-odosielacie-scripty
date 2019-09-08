@@ -1,6 +1,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#define BME280_ADRESA (0x77)
+//#define BME280_ADRESA (0x77)
+#define BME280_ADRESA (0x76)
 Adafruit_BME280 bme;
 void setup() {
   Serial.begin(115200);
