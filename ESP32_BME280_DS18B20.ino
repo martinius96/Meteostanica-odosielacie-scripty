@@ -9,6 +9,7 @@ hw_timer_t *timer = NULL;
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #define ONE_WIRE_BUS 0 //D3 DS18b20 pripojit na tuto zbernicu
+//#define BME280_ADRESA (0x77)
 #define BME280_ADRESA (0x76)
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
