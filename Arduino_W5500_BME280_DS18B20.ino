@@ -8,6 +8,7 @@
 #define ONE_WIRE_BUS 8               //definovany pin OneWire zbernice
 OneWire oneWire(ONE_WIRE_BUS);       //inicializacia pinu
 DallasTemperature sensors(&oneWire); //priradenie ds18b20 senzorov na onewire zbernicu
+//#define BME280_ADRESA (0x77)
 #define BME280_ADRESA (0x76)
 Adafruit_BME280 bme;
 byte mac[] = { 0x20, 0x1A, 0x06, 0x75, 0x8C, 0xAA };
